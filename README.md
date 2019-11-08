@@ -1,2 +1,1 @@
-# awesome
-awesomewm configuration and themes
+configuration files for awesome wm
