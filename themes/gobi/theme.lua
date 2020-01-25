@@ -16,41 +16,44 @@ local theme = {}
 local bg_black = "#333333"
 local fg_white = "#ffffff"
 local fg_grey = "#828282"
+local white = "#ffffff"
+local black = "#000000"
+local orange = "#f2a61a"
 
 
-theme.font          = "hack 8"
+theme.font          = "hack bold 8"
 
-theme.bg_normal     = bg_black
-theme.bg_focus      = bg_black
-theme.bg_urgent     = "#ff0000"
-theme.bg_minimize   = "#444444"
-theme.bg_systray    = theme.bg_normal
+theme.bg_normal     = black
+theme.bg_focus      = white
+theme.bg_urgent     = orange
+theme.bg_minimize   = black
+theme.bg_systray    = black
 
-theme.fg_normal     = fg_grey
-theme.fg_focus      = fg_white 
-theme.fg_urgent     = fg_grey
-theme.fg_minimize   = fg_grey
+theme.fg_normal     = white
+theme.fg_focus      = black
+theme.fg_urgent     = black
+theme.fg_minimize   = white
 
-theme.useless_gap   = dpi(1)
-theme.border_width  = dpi(1)
-theme.border_normal = "#000000"
-theme.border_focus  = "#535d6c"
+theme.useless_gap   = 0
+theme.border_width  = dpi(3)
+theme.border_normal = black 
+theme.border_focus  = white
 theme.border_marked = "#91231c"
 
-theme.tasklist_bg_normal = bg_black
-theme.tasklist_bg_focus = bg_black
-theme.tasklist_fg_focus = fg_white
-theme.tasklist_fg_normal = fg_grey
+theme.tasklist_bg_normal = black
+theme.tasklist_fg_normal = white
+theme.tasklist_bg_focus = white
+theme.tasklist_fg_focus = black
 
-theme.titlebar_bg_normal = bg_black
-theme.titlebar_bg_focus = bg_black
-theme.titlebar_fg_focus = fg_white
-theme.titlebar_fg_normal = fg_grey
+theme.titlebar_bg_normal = black 
+theme.titlebar_fg_normal = white
+theme.titlebar_bg_focus = white 
+theme.titlebar_fg_focus = black
 
-theme.taglist_bg_normal = bg_black
-theme.taglist_bg_focus = bg_black
-theme.taglist_fg_focus = fg_white
-theme.taglist_fg_normal = fg_grey
+theme.taglist_bg_normal = black
+theme.taglist_bg_focus = white
+theme.taglist_fg_normal = white
+theme.taglist_fg_focus = black
 
 -- There are other variable sets
 -- overriding the default one when
@@ -84,8 +87,8 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = theme_path.."default/submenu.png"
-theme.menu_height = dpi(15)
-theme.menu_width  = dpi(100)
+theme.menu_height = dpi(0)
+theme.menu_width  = dpi(0)
 
 -- You can add as many variables as
 -- you wish and access them by using

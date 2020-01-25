@@ -199,7 +199,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
-        buttons = tasklist_buttons
+        buttons = tasklist_buttons,
     }
 
     -- Create the wibox
@@ -272,18 +272,14 @@ globalkeys = gears.table.join(
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey,           }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
+    awful.key({ modkey,           }, "Tab", function () awful.client.focus.byidx(1) end,
+	      {description = "next client", group = "client"}),
+    awful.key({ modkey, "Shift"   }, "Tab", function () awful.client.focus.byidx(-1) end,
+	      {description = "prev client", group = "client"}),
 
     -- Standard program
     awful.key({ modkey,		}, "Print", function () awful.spawn("scrot /home/lankenj/img/screenshot/'%Y-%m-%d-%M-%S.png'") 			end, {description = "take a screenshot", group = "awesome"}),
-    awful.key({ modkey, "Shift"}, "l", function () awful.spawn("i3lock -f -i " .. splash_path .. "/0.png") end,
+    awful.key({ modkey, "Control"}, "l", function () awful.spawn("i3lock -f -i " .. splash_path .. "/0.png") end,
     		{description = "lock the screen", group = "awesome"}),
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
@@ -476,7 +472,8 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     placement = awful.placement.no_overlap+awful.placement.no_offscreen
+                     placement = awful.placement.no_overlap+awful.placement.no_offscreen,
+					 size_hints_honor = false
      }
     },
 
