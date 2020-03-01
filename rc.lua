@@ -117,23 +117,30 @@ mytextclock = wibox.widget.textclock()
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
+					-- View tag when clicked
                     awful.button({ }, 1, function(t) t:view_only() end),
+					-- Move focused client to tag when clicked
                     awful.button({ modkey }, 1, function(t)
                                               if client.focus then
                                                   client.focus:move_to_tag(t)
                                               end
                                           end),
+					-- Right click on show client of event target on currently selected tag 
                     awful.button({ }, 3, awful.tag.viewtoggle),
+					-- Mod right click on tag = Take focused window with you when moving to tag
                     awful.button({ modkey }, 3, function(t)
                                               if client.focus then
                                                   client.focus:toggle_tag(t)
                                               end
                                           end),
+					-- Scroll through tags (up) with mouse wheel up
                     awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+					-- Scroll through tags (down) with mouse wheel down
                     awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
                 )
 
 local tasklist_buttons = gears.table.join(
+					-- Activate client on click, minimize if target is focused client
                      awful.button({ }, 1, function (c)
                                               if c == client.focus then
                                                   c.minimized = true
@@ -145,9 +152,7 @@ local tasklist_buttons = gears.table.join(
                                                   )
                                               end
                                           end),
-                     awful.button({ }, 3, function()
-                                              awful.menu.client_list({ theme = { width = 250 } })
-                                          end),
+					-- Scroll through clients with mouse wheel
                      awful.button({ }, 4, function ()
                                               awful.client.focus.byidx(1)
                                           end),
@@ -167,6 +172,25 @@ local function set_wallpaper(s)
     end
 end
 
+-- Filter function return true on if tag has given index and is non-empty
+function tagIdentityFilter(i) 
+	return function (t) 
+		return t.index == i and #t:clients() > 0
+	end 
+end
+
+-- Filter function returning true for client that have the tag with given index
+function hasTagFilter(i)
+	return function (c,s) 
+		ctags = c:tags()
+		for _, t in ipairs(ctags) do
+			if t.index == i then
+				return true
+			end
+		return false
+		end
+	end
+end
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
@@ -196,11 +220,56 @@ awful.screen.connect_for_each_screen(function(s)
     }
 
     -- Create a tasklist widget
+	-- i need n different task list widget
+	-- each of them show tasks for a certain tag identified by id
+	-- these tasklist should be inserted in the taglist widget
+	-- later : change wigdet_template to only show icons of tasks
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
-        filter  = awful.widget.tasklist.filter.currenttags,
+        filter  = awful.widget.tasklist.filter.alltags,
         buttons = tasklist_buttons,
     }
+
+	tagTaskList = wibox.layout.fixed.horizontal()
+	local allTags = s.tags
+	for i, t in ipairs(allTags) do 
+		taglist	= awful.widget.taglist {
+			screen = s,
+			filter = tagIdentityFilter(i),
+			buttons = taglist_buttons	
+		}
+
+		tasklist = awful.widget.tasklist {
+			screen = s,
+			filter = hasTagFilter(i),
+			buttons = tasklist_button,
+			layout = {
+				spacing = 1,
+				layout = wibox.layout.fixed.horizontal
+			},
+			widget_template = {
+			{
+					{
+							{
+								id     = 'icon_role',
+								widget = wibox.widget.imagebox,
+							},
+						layout = wibox.layout.fixed.horizontal,
+					},
+					left  = 5,
+					right = 5,
+					widget = wibox.container.margin
+				},
+				id     = 'background_role',
+				forced_width = 40,
+				widget = wibox.container.background,
+			},
+		}
+		
+		tagTaskList:add(taglist)
+		tagTaskList:add(tasklist)
+	end
+
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "bottom", screen = s })
@@ -211,14 +280,15 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
-            s.mytaglist,
+            -- s.mytaglist,
+			tagTaskList,
             s.mypromptbox,
         },
-        s.mytasklist, -- Middle widget
+		{
+			layout = wibox.layout.fixed.horizontal	
+		},
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            -- disabled keyboardlayout widget because it fucked up my xmodmap config when clicked on 
-	    -- mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
@@ -226,6 +296,7 @@ awful.screen.connect_for_each_screen(function(s)
     }
 end)
 -- }}}
+
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
