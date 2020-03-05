@@ -236,7 +236,23 @@ awful.screen.connect_for_each_screen(function(s)
 		taglist	= awful.widget.taglist {
 			screen = s,
 			filter = tagIdentityFilter(i),
-			buttons = taglist_buttons	
+			buttons = taglist_buttons,
+			widget_template = {
+				{
+					{
+						{
+							id = 'text_role', 
+							widget = wibox.widget.textbox
+						},
+						layout = wibox.layout.fixed.horizontal,
+					},
+					margins = 5,
+					widget = wibox.container.margin	
+				},
+				id = 'background_role',
+				forced_width = 40,
+				widget = wibox.container.background
+			}
 		}
 
 		tasklist = awful.widget.tasklist {
@@ -256,8 +272,7 @@ awful.screen.connect_for_each_screen(function(s)
 							},
 						layout = wibox.layout.fixed.horizontal,
 					},
-					left  = 5,
-					right = 5,
+					margins = 10,
 					widget = wibox.container.margin
 				},
 				id     = 'background_role',
