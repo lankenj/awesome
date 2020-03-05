@@ -54,6 +54,8 @@ theme.taglist_bg_normal = black
 theme.taglist_bg_focus = white
 theme.taglist_fg_normal = white
 theme.taglist_fg_focus = black
+theme.taglist_bg_occupied = black
+theme.taglist_fg_occupied = white
 
 -- There are other variable sets
 -- overriding the default one when

@@ -200,7 +200,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    awful.tag({ "1:", "2:", "3:", "4:", "5:", "6:", "7:", "8:", "9:" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -246,11 +246,13 @@ awful.screen.connect_for_each_screen(function(s)
 						},
 						layout = wibox.layout.fixed.horizontal,
 					},
-					margins = 5,
+					top = 2,
+					bottom = 2,
+					left = 5,
+					right = 5,
 					widget = wibox.container.margin	
 				},
 				id = 'background_role',
-				forced_width = 40,
 				widget = wibox.container.background
 			}
 		}
@@ -272,7 +274,10 @@ awful.screen.connect_for_each_screen(function(s)
 							},
 						layout = wibox.layout.fixed.horizontal,
 					},
-					margins = 10,
+					top = 2,
+					bottom = 2,
+					left = 5,
+					right = 5,
 					widget = wibox.container.margin
 				},
 				id     = 'background_role',
@@ -285,6 +290,15 @@ awful.screen.connect_for_each_screen(function(s)
 		tagTaskList:add(tasklist)
 	end
 
+	marginContainer = wibox.container.margin()
+	marginContainer.widget = tagTaskList
+	marginContainer.margins = 2
+
+	container = wibox.container.background() 
+	container.widget = marginContainer
+	container.bg = '#ffffff'
+
+
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "bottom", screen = s })
 
@@ -295,7 +309,8 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
             -- s.mytaglist,
-			tagTaskList,
+			-- tagTaskList,
+			container,
             s.mypromptbox,
         },
 		{
