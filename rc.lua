@@ -175,7 +175,7 @@ end
 -- Filter function return true on if tag has given index and is non-empty
 function tagIdentityFilter(i) 
 	return function (t) 
-		return t.index == i and #t:clients() > 0
+		return t.index == i and (#t:clients() > 0 or t.selected)
 	end 
 end
 
@@ -265,11 +265,10 @@ awful.screen.connect_for_each_screen(function(s)
 				widget = wibox.container.background,
 			},
 		}
-		
+
 		tagTaskList:add(taglist)
 		tagTaskList:add(tasklist)
 	end
-
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "bottom", screen = s })
