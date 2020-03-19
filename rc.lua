@@ -153,6 +153,7 @@ local tasklist_buttons = gears.table.join(
                                                       "tasklist",
                                                       {raise = true}
                                                   )
+												  c:jump_to(false)
                                               end
                                           end),
 					-- Scroll through clients with mouse wheel
@@ -264,7 +265,7 @@ awful.screen.connect_for_each_screen(function(s)
 		tasklist = awful.widget.tasklist {
 			screen = s,
 			filter = hasTagFilter(i),
-			buttons = tasklist_button,
+			buttons = tasklist_buttons,
 			layout = {
 				spacing = 1,
 				layout = wibox.layout.fixed.horizontal
@@ -298,9 +299,10 @@ awful.screen.connect_for_each_screen(function(s)
 	marginContainer.widget = tagTaskList
 	marginContainer.margins = 2
 
-	container = wibox.container.background() 
-	container.widget = marginContainer
-	container.bg = '#ffffff'
+	tagTaskListContainer = wibox.container.background() 
+	tagTaskListContainer.widget = marginContainer
+	-- TODO: This should be gotten from the theme
+	tagTaskListContainer.bg = '#ffffff'
 
 
     -- Create the wibox
@@ -312,9 +314,7 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
-            -- s.mytaglist,
-			-- tagTaskList,
-			container,
+			tagTaskListContainer,
             s.mypromptbox,
         },
 		{
